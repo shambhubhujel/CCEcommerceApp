@@ -10,10 +10,25 @@
   "dependencies": {
     "core-js": "3",
     "expo": "^33.0.0",
+    "@expo/vector-icons": "^6.3.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
-    "react-native-web": "^0.11.4"
+    "react-native-web": "^0.11.4",
+    "firebase": "^5.7.2",
+    "lottie-react-native": "^2.5.10",
+    "native-base": "2.8.1",
+    "react-native-easy-grid": "^0.2.1",
+    "react-native-elements": "^0.19.1",
+    "react-native-image-placeholder": "^1.0.14",
+    "react-native-loader": "^1.2.1",
+    "react-native-search-header": "^0.2.6",
+    "react-native-snap-carousel": "^3.7.5",
+    "react-navigation": "^1.5.11",
+    "react-redux": "^5.1.1",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1"
