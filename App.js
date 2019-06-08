@@ -3,6 +3,7 @@ import * as Expo from "expo";
 import { Font } from "expo";
 import { DrawerNavigator } from "react-navigation";
 import LoginScreen from "./Screens/LoginScreen";
+import SignUpScreen from "./Screens/SignUpScreen";
 import DrawerContent from "./Components/DrawerContent";
 
 export default class App extends React.Component {
@@ -40,10 +41,13 @@ const AppDrawer = DrawerNavigator(
 
     Login: {
       screen: LoginScreen
+    },
+    SignUp: {
+      screen: SignUpScreen
     }
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "SignUp",
     contentComponent: props => <DrawerContent {...props} />
   }
 );
