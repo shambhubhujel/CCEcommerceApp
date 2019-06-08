@@ -1,9 +1,10 @@
 import React from "react";
-import * as Expo from "expo";
-import { Font } from "expo";
+import * as Font from 'expo-font';
 import { DrawerNavigator } from "react-navigation";
+import HomeScreen from "./Screens/HomeScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import SignUpScreen from "./Screens/SignUpScreen";
+import ProfileScreen from "./Screens/ProfileScreen";
 import DrawerContent from "./Components/DrawerContent";
 
 export default class App extends React.Component {
@@ -44,6 +45,15 @@ const AppDrawer = DrawerNavigator(
     },
     SignUp: {
       screen: SignUpScreen
+    },
+    Home: {
+      screen: HomeScreen
+      // navigationOptions: {
+      //   tabBarLabel: "Settings"
+      // }
+    },
+    Profile: {
+      screen: ProfileScreen
     }
   },
   {

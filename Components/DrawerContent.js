@@ -42,9 +42,35 @@ export default class DrawerContent extends Component {
                 <Icon ios="ios-send" android="md-send" />
               </Button>
             </Row>
-
-
-          </Grid>
+            <Row size={2}>
+              <Col>
+                <List>
+                  <ListItem icon onPress={() => navigation.navigate("Home")}>
+                    <Left>
+                      <Icon type="Octicons" name="home" />
+                    </Left>
+                    <Body>
+                      <Text>Home</Text>
+                    </Body>
+                    <Right>
+                      <Icon name="ios-arrow-forward" />
+                    </Right>
+                  </ListItem>
+                  <ListItem icon onPress={() => navigation.navigate("Profile")}>
+                    <Left>
+                      <Icon type="FontAwesome" name="user-secret" />
+                    </Left>
+                    <Body>
+                      <Text>My Profile</Text>
+                    </Body>
+                    <Right>
+                      <Icon name="ios-arrow-forward" />
+                    </Right>
+                  </ListItem>
+                  </List>
+              </Col>
+            </Row>
+            </Grid>
         </Content>
       </Container>
     );
