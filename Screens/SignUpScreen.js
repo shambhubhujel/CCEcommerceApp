@@ -9,19 +9,20 @@ import {
   Item,
   Label,
   Input,
-  H1
-} from "native-base";
+  H1} from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
+
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
 
-class LoginScreen extends Component {
+class SignUpScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: "",
       password: "",
+      passwordConfirm: "",
       user: {},
       loggedIn: false
     };
@@ -53,11 +54,10 @@ class LoginScreen extends Component {
   }
 
   render() {
-
     return (
       <Container style={styles.container}>
         <NavBar
-          title="Login"
+          title="Sign Up"
           drawerOpen={() => this.props.navigation.navigate("DrawerToggle")}
         />
         <Content>
@@ -87,33 +87,52 @@ class LoginScreen extends Component {
                       onChangeText={password => this.setState({ password })}
                     />
                   </Item>
+                  <Item floatingLabel>
+                    <Label>Confirm Password</Label>
+                    <Input
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      onChangeText={passwordConfirm =>
+                        this.setState({ passwordConfirm })
+                      }
+                    />
+                  </Item>
                 </Form>
               </Col>
             </Row>
             <Row
               style={{
-                padding: 60
+                padding: 20
               }}
             >
-              <Col size={1} />
-              <Col size={2}>
-                <Button
-                  rounded
-                  onPress={() =>
-                    this.logInUser(this.state.email, this.state.password)
-                  }
-                >
-                  <Text>Login</Text>
-                  <Icon ios="ios-send" android="md-send" />
-                </Button>
+              <Col>
+                <Row style={{ paddingLeft: 40 }}>
+                  <Button
+                    rounded
+                    info
+                    onPress={() => this.props.navigation.navigate("Login")}
+                  >
+                    <Text>Login</Text>
+                    <Icon name="login" type="MaterialCommunityIcons" />
+                  </Button>
+                  <H1 style={{ padding: 10 }} />
+                  <Button
+                    rounded
+                    disabled
+                    onPress={() =>
+                      this.signUpUser(this.state.email, this.state.password)
+                    }
+                  >
+                    <Text>Sign Up</Text>
+                    <Icon ios="ios-send" android="md-send" />
+                  </Button>
+                </Row>
               </Col>
-              <Col size={1} />
             </Row>
-
             <Row size={1}>
               <Col size={1} />
               <Col size={2}>
-                <H1 style={{ padding: 2, fontSize: 15, textAlign: "center" }}>Log in with</H1>
+                <H1 style={{ padding: 5, fontSize: 15, textAlign: "center" }}>Log in with</H1>
                 <Button
                   block
                   iconLeft
@@ -140,4 +159,4 @@ class LoginScreen extends Component {
   }
 }
 
-export default LoginScreen;
+export default SignUpScreen;
