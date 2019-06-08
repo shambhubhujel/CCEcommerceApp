@@ -46,7 +46,7 @@ export default class DrawerContent extends Component {
               <Col>
                 <List>
                   <ListItem icon onPress={() => navigation.navigate("Home")}>
-                    <Left>
+                  <Left>
                       <Icon type="Octicons" name="home" />
                     </Left>
                     <Body>
@@ -56,12 +56,54 @@ export default class DrawerContent extends Component {
                       <Icon name="ios-arrow-forward" />
                     </Right>
                   </ListItem>
+
+                  <ListItem
+                    icon
+                    onPress={() => navigation.navigate("Category")}
+                  >
+                    <Left>
+                      <Icon type="FontAwesome" name="th-list" />
+                    </Left>
+                    <Body>
+                      <Text>Categories</Text>
+                    </Body>
+                    <Right>
+                      <Icon name="ios-arrow-forward" />
+                    </Right>
+                  </ListItem>
+
+                  <ListItem
+                    icon
+                    onPress={() => navigation.navigate("WatchList")}
+                  >
+                    <Left>
+                      <Icon type="Octicons" name="checklist" />
+                    </Left>
+                    <Body>
+                      <Text>My Watchlist</Text>
+                    </Body>
+                    <Right>
+                      <Icon name="ios-arrow-forward" />
+                    </Right>
+                  </ListItem>
+
                   <ListItem icon onPress={() => navigation.navigate("Profile")}>
                     <Left>
                       <Icon type="FontAwesome" name="user-secret" />
                     </Left>
                     <Body>
                       <Text>My Profile</Text>
+                    </Body>
+                    <Right>
+                      <Icon name="ios-arrow-forward" />
+                    </Right>
+                  </ListItem>
+                  <ListItem icon onPress={() => navigation.navigate("About")}>
+                    <Left>
+                      <Icon type="Octicons" name="info" />
+                    </Left>
+                    <Body>
+                      <Text>About</Text>
                     </Body>
                     <Right>
                       <Icon name="ios-arrow-forward" />
