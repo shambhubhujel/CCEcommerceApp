@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as firebase from "firebase";
 import {
   Container,
   Content,
@@ -9,11 +10,13 @@ import {
   Item,
   Label,
   Input,
-  H1} from "native-base";
+  H1
+} from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
+import { fbKey, androidID, iosID } from "../assets/constants";
 
 class SignUpScreen extends Component {
   constructor(props) {
@@ -30,28 +33,97 @@ class SignUpScreen extends Component {
     this.signUpUser = this.signUpUser.bind(this);
     this.logInUser = this.logInUser.bind(this);
     this.loginWithFacebook = this.loginWithFacebook.bind(this);
+    this.signInWithGoogleAsync = this.signInWithGoogleAsync.bind(this);
     this.signOut = this.signOut.bind(this);
   }
 
-  signUpUser = () => {
-    //code
+  signUpUser = (email, password) => {
+    try {
+      if (this.state.password.length < 6) {
+        alert("Password is too short");
+        return;
+      }
+
+      firebase.auth().createUserWithEmailAndPassword(email, password);
+      console.log("sign up complete");
+      navigate("Home");
+
+    } catch (error) {
+      console.log(error.toString());
+    }
   };
 
-  logInUser = () => {
-    //code
+  logInUser = (email, password) => {
+    const { navigate } = this.props.navigation;
+    try {
+      if (this.state.password.length < 6) {
+        alert("Password is too short");
+        return;
+      }
+      this.props.requestLogin();
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+      // .then(user => this.props.loginSuccess(user));
+      navigate("Home");
+    } catch (error) {
+      this.props.loginFail(error.toString());
+    }
   };
 
   signOut() {
-    //code
+    firebase
+      .auth()
+      .signOut()
+      .then(
+        () => {
+          console.log("Signed Out");
+          this.setState({
+            user: {},
+            loggedIn: false
+          });
+        },
+        function (error) {
+          console.error("Sign Out Error", error);
+        }
+      );
   }
+  async signInWithGoogleAsync() {
+    try {
+      const { navigate } = this.props.navigation;
+      const result = await Expo.Google.logInAsync({
+        androidClientId: androidID,
+        iosClientId: iosID,
+        scopes: ["profile", "email"]
+      });
 
+      if (result.type === "success") {
+        const credential = firebase.auth.GoogleAuthProvider.credential(
+          result.idToken,
+          result.accessToken
+        );
+        console.log(credential);
+        firebase
+        .auth()
+        .signInAndRetrieveDataWithCredential(credential)
+        // .then(user => {
+        //   this.props.loginSuccess(user);
+        // })
+        .catch(error => {
+          this.props.loginFail(error.toString());
+        });
+      navigate("Home");
+    } else {
+      Alert.alert("Login not sucessfull, try again.");
+    }
+  } catch (e) {
+    console.log(e.toString());
+  }
+  }
   async loginWithFacebook() {
     //code
   }
 
-  async signInWithGoogleAsync() {
-    //code
-  }
 
   render() {
     return (
