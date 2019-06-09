@@ -122,7 +122,27 @@ class SignUpScreen extends Component {
   }
   async loginWithFacebook() {
     //code
-  }
+    this.props.requestLogin();
+
+    const { navigate } = this.props.navigation;
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+      fbKey,
+      { permissions: ["public_profile"] }
+    );
+
+    if (type == "success") {
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+
+      firebase
+        .auth()
+        .signInAndRetrieveDataWithCredential(credential)
+        // .then(user => this.props.loginSuccess(user))
+        .catch(error => {
+          this.props.loginFail(error);
+        });
+      navigate("Home");
+    }
+  };
 
 
   render() {

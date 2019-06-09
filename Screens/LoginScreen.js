@@ -104,6 +104,44 @@ class LoginScreen extends Component {
   }
   async loginWithFacebook() {
     //code
+    this.props.requestLogin();
+
+    const { navigate } = this.props.navigation;
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+      fbKey,
+      { permissions: ["public_profile"] }
+    );
+
+    if (type == "success") {
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+
+      firebase
+        .auth()
+        .signInAndRetrieveDataWithCredential(credential)
+        // .then(user => this.props.loginSuccess(user))
+        .catch(error => {
+          this.props.loginFail(error);
+        });
+      navigate("Home");
+    }
+  };
+
+  logInUser = (email, password) => {
+    const { navigate } = this.props.navigation;
+    try {
+      if (this.state.password.length < 6) {
+        alert("Password is too short");
+        return;
+      }
+      this.props.requestLogin();
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+      // .then(user => this.props.loginSuccess(user));
+      navigate("Home");
+    } catch (error) {
+      this.props.loginFail(error.toString());
+    }
   }
 
   render() {
