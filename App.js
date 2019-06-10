@@ -1,20 +1,13 @@
 import React from "react";
 import * as Expo from "expo";
 
-import { StyleSheet } from "react-native";
 //packages
-import * as firebase from "firebase";
+import firebase from "firebase";
 import { Dimensions } from "react-native";
-
-import { DrawerNavigator } from "react-navigation";
-import HomeScreen from "./Screens/HomeScreen";
-import LoginScreen from "./Screens/LoginScreen";
-import SignUpScreen from "./Screens/SignUpScreen";
-import ProfileScreen from "./Screens/ProfileScreen";
-import CategoryScreen from "./Screens/CategoryScreen";
-import WatchListScreen from "./Screens/WatchListScreen";
-import AboutScreen from "./Screens/AboutScreen";
-import DrawerContent from "./Components/Drawer/DrawerContent";
+import ParentProvider from "./redux/ParentProvider";
+import store from './redux/store';
+import { loginSuccess } from './redux/reducers/userModule';
+import { firebaseKey } from "./private/constants";
 export const { width, height } = Dimensions.get("screen");
 
 //init firebase
@@ -26,49 +19,27 @@ const firebaseConfig = {
   storageBucket: "react-nativedemo-902aa.appspot.com"
 };
 
-firebase.initializeApp(firebaseConfig);
-
-//init db
-// Get a reference to the database service
-// var database = firebase.database();
-
-// console.log("====================================");
-// console.log(database);
-// console.log("====================================");
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       appReady: false,
-      user: {}
     };
-
-    //use this word inside function
-    // this.signUpUser = this.signUpUser.bind(this);
-    // this.logInUser = this.logInUser.bind(this);
-    // this.loginWithFacebook = this.loginWithFacebook.bind(this);
-    // this.signOut = this.signOut.bind(this);
   }
 
   componentWillMount() {
     this.loadFonts();
+    firebase.initializeApp(firebaseConfig);
     // Listen for authentication state to change.
     firebase.auth().onAuthStateChanged(user => {
       if (user != null) {
-        this.setState({
-          user
-        });
+        store.dispatch(loginSuccess(user));
         console.log("User is authentificated!");
       } else {
         console.log("Guest online");
-        this.setState({
-          user: {}
-        });
       }
-      // Do other things
     });
-    console.log("App started ");
+    console.log("App started succesfully");
   }
 
   async loadFonts() {
@@ -84,57 +55,7 @@ export default class App extends React.Component {
     if (!this.state.appReady) {
       return <Expo.AppLoading />;
     }
-    return <AppDrawer />;
+    return <ParentProvider />
   }
 }
-const AppDrawer = DrawerNavigator(
-  {
-
-    Home: {
-      screen: HomeScreen
-      // navigationOptions: {
-      //   tabBarLabel: "Settings"
-      // }
-    },
-    Login: {
-      screen: LoginScreen
-    },
-    SignUp: {
-      screen: SignUpScreen
-    },
-    Profile: {
-      screen: ProfileScreen
-    },
-    Category: {
-      screen: CategoryScreen
-    },
-    About: {
-      screen: AboutScreen
-    },
-    WatchList: {
-      screen: WatchListScreen
-    }
-  },
-  {
-    initialRouteName: "SignUp",
-    contentComponent: props => <DrawerContent {...props} />
-  }
-);
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  drawerHeader: {
-    height: 150,
-    backgroundColor: "white",
-    paddingTop: 20
-  },
-  drawerImage: {
-    height: 100,
-    width: 100,
-    borderRadius: 75,
-    left: "25%"
-  }
-});
-
 
