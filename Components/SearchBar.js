@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import {
+  Container,
   Header,
   Item,
   Input,
-  Icon} from "native-base";
+  Icon,
+  Button,
+  Text
+} from "native-base";
 export default class SearchBar extends Component {
   render() {
     return (

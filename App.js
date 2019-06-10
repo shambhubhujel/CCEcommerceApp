@@ -1,5 +1,4 @@
 import React from "react";
-import * as Font from 'expo-font';
 import * as Expo from "expo";
 import { DrawerNavigator } from "react-navigation";
 import HomeScreen from "./Screens/HomeScreen";
@@ -7,10 +6,9 @@ import LoginScreen from "./Screens/LoginScreen";
 import SignUpScreen from "./Screens/SignUpScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import CategoryScreen from "./Screens/CategoryScreen";
-import { firebaseKey } from "./assets/constants";
-import DrawerContent from "./Components/DrawerContent";
 import WatchListScreen from "./Screens/WatchListScreen";
 import AboutScreen from "./Screens/AboutScreen";
+import DrawerContent from "./Components/Drawer/DrawerContent";
 
 export default class App extends React.Component {
   constructor(props) {
