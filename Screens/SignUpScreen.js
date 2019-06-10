@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import * as firebase from "firebase";
+import { connect } from 'react-redux';
+
+import { Alert } from "react-native";
+import firebase from "firebase";
 import {
   Container,
   Content,
@@ -10,13 +13,14 @@ import {
   Item,
   Label,
   Input,
-  H1
+  H1,
+
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
-
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
-import { fbKey, androidID, iosID } from "../assets/constants";
+import { requestLogin, loginSuccess, loginFail } from '../redux/reducers/userModule';
+import { fbKey, androidID, iosID } from "../private/constants";
 
 class SignUpScreen extends Component {
   constructor(props) {
@@ -46,28 +50,28 @@ class SignUpScreen extends Component {
 
       firebase.auth().createUserWithEmailAndPassword(email, password);
       console.log("sign up complete");
-      navigate("Home");
-
     } catch (error) {
       console.log(error.toString());
     }
   };
 
   logInUser = (email, password) => {
-    const { navigate } = this.props.navigation;
     try {
       if (this.state.password.length < 6) {
         alert("Password is too short");
         return;
       }
-      this.props.requestLogin();
+
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-      // .then(user => this.props.loginSuccess(user));
-      navigate("Home");
+        .then(user => {
+          this.setState({ user, loggedIn: true });
+          // console.log(user);
+        });
+      console.log("logged in with email");
     } catch (error) {
-      this.props.loginFail(error.toString());
+      console.log(error.toString());
     }
   };
 
@@ -88,7 +92,9 @@ class SignUpScreen extends Component {
         }
       );
   }
+
   async signInWithGoogleAsync() {
+    this.props.requestLogin();
     try {
       const { navigate } = this.props.navigation;
       const result = await Expo.Google.logInAsync({
@@ -96,32 +102,36 @@ class SignUpScreen extends Component {
         iosClientId: iosID,
         scopes: ["profile", "email"]
       });
+      //console.log(result);
 
       if (result.type === "success") {
         const credential = firebase.auth.GoogleAuthProvider.credential(
           result.idToken,
           result.accessToken
         );
-        console.log(credential);
+        //console.log(credential);
         firebase
-        .auth()
-        .signInAndRetrieveDataWithCredential(credential)
-        // .then(user => {
-        //   this.props.loginSuccess(user);
-        // })
-        .catch(error => {
-          this.props.loginFail(error.toString());
-        });
-      navigate("Home");
-    } else {
-      Alert.alert("Login not sucessfull, try again.");
+          .auth()
+          .signInAndRetrieveDataWithCredential(credential)
+          // .then(user => {
+          //   this.props.loginSuccess(user);
+          // })
+          .catch(error => {
+            this.props.loginFail(error.toString());
+          });
+        navigate("Home");
+      } else {
+        Alert.alert("Login not sucessfull, try again.");
+      }
+      // if (this.props.user.auth === true) {
+      //   () => navigate("Home");
+      // }
+    } catch (e) {
+      console.log(e.toString());
     }
-  } catch (e) {
-    console.log(e.toString());
   }
-  }
+
   async loginWithFacebook() {
-    //code
     this.props.requestLogin();
 
     const { navigate } = this.props.navigation;
@@ -142,8 +152,7 @@ class SignUpScreen extends Component {
         });
       navigate("Home");
     }
-  };
-
+  }
 
   render() {
     return (
@@ -210,7 +219,7 @@ class SignUpScreen extends Component {
                   <H1 style={{ padding: 10 }} />
                   <Button
                     rounded
-                    disabled
+                    success
                     onPress={() =>
                       this.signUpUser(this.state.email, this.state.password)
                     }
@@ -221,34 +230,12 @@ class SignUpScreen extends Component {
                 </Row>
               </Col>
             </Row>
-            <Row size={1}>
-              <Col size={1} />
-              <Col size={2}>
-                <H1 style={{ padding: 5, fontSize: 15, textAlign: "center" }}>Log in with</H1>
-                <Button
-                  block
-                  iconLeft
-                  danger
-                  onPress={() => {
-                    this.signInWithGoogleAsync();
-                  }}
-                >
-                  <Icon type="FontAwesome" name="google-plus" />
-                  <Text>Google</Text>
-                </Button>
-                <H1 style={{ padding: 1 }} />
-                <Button block iconLeft onPress={() => this.loginWithFacebook()}>
-                  <Icon type="FontAwesome" name="facebook-official" />
-                  <Text>Facebook Login</Text>
-                </Button>
-              </Col>
-              <Col size={1} />
-            </Row>
+            <SocialMediaButtons facebook={() => this.loginWithFacebook()} google={() => this.signInWithGoogleAsync()} />
           </Grid>
         </Content>
       </Container>
     );
   }
 }
-
-export default SignUpScreen;
+const mapStateToProps = state => ({ user: state.user });
+export default connect(mapStateToProps, { requestLogin, loginSuccess, loginFail })(SignUpScreen);

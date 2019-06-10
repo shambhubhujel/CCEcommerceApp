@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Image } from "react-native";
-
 import { starRating } from '../assets/GenerateStarRating';
 import {
   Container,
@@ -8,6 +7,7 @@ import {
   Card,
   CardItem,
   Text,
+  Icon,
   Left,
   Body,
   Right,
@@ -46,12 +46,44 @@ class ResultScreen extends Component {
 
   //gets all items based on user query
   async fetchItem() {
-   //code
+    //code
   }
-
   //gets all items based on category
   async fetchItemsByCategory() {
-   //code
+    //code
+  }
+
+
+
+  //if 0 then return free shipping
+  shipping(i) {
+    if (i == 0) {
+      return <Text>Free shipping</Text>;
+    } else {
+      return <Text note>Shipping : {i}</Text>;
+    }
+  }
+  //if the item is available return green icon
+  checkItem(status) {
+    if (status == true) {
+      return (
+        <Icon
+          style={{ color: "green", fontSize: 15 }}
+          active
+          name="check-circle-o"
+          type="FontAwesome"
+        />
+      );
+    } else {
+      return (
+        <Icon
+          style={{ color: "red", fontSize: 15 }}
+          active
+          name="times-circle-o"
+          type="FontAwesome"
+        />
+      );
+    }
   }
 
   render() {

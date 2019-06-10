@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-
+import { connect } from 'react-redux';
 import {
   Container,
   Content,
   Text,
   List,
-  FlatList,
+  ListItem,
   Left,
   Body,
   Thumbnail,
@@ -20,6 +20,7 @@ import styles from "../assets/styling";
 
 class ProfileScreen extends Component {
   render() {
+    const { user } = this.props.user;
     return (
       <Container style={styles.container}>
         <NavBar
@@ -32,7 +33,7 @@ class ProfileScreen extends Component {
               <Row>
                 <Col>
                   <List>
-                    <FlatList avatar>
+                    <ListItem avatar>
                       <Left>
                         <Thumbnail
                           source={{ uri: user.providerData[0].photoURL }}
@@ -41,15 +42,15 @@ class ProfileScreen extends Component {
                       <Body>
                         <Text>{user.displayName}</Text>
                       </Body>
-                    </FlatList>
-                    <FlatList icon>
+                    </ListItem>
+                    <ListItem icon>
                       <Left>
                         <Icon name="sign-in" type="FontAwesome" />
                       </Left>
                       <Text>
                         Signed up via : {user.providerData[0].providerId}
                       </Text>
-                    </FlatList>
+                    </ListItem>
                     <Item>
                       <Icon active name="home" />
                       <Input placeholder="Address" />
@@ -90,4 +91,7 @@ class ProfileScreen extends Component {
   }
 }
 
-export default ProfileScreen;
+const mapStateToProps = state => ({ user: state.user });
+
+export default connect(mapStateToProps, {})(ProfileScreen);
+

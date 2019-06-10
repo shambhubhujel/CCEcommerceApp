@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import * as firebase from "firebase";
+import { Alert } from "react-native";
+import { connect } from 'react-redux';
+import Expo from 'expo';
+import firebase from "firebase";
+import { requestLogin, loginSuccess, loginFail } from '../redux/reducers/userModule';
 import {
   Container,
   Content,
@@ -13,8 +17,7 @@ import {
   H1
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
-
-import { fbKey, androidID, iosID } from "../assets/constants";
+import { fbKey, androidID, iosID } from "../private/constants";
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
 
@@ -45,9 +48,6 @@ class LoginScreen extends Component {
         }
       );
   }
-
- 
-
   logInUser = (email, password) => {
     const { navigate } = this.props.navigation;
     try {
@@ -67,6 +67,7 @@ class LoginScreen extends Component {
   };
 
   async signInWithGoogleAsync() {
+    this.props.requestLogin();
     try {
       const { navigate } = this.props.navigation;
       const result = await Expo.Google.logInAsync({
@@ -74,14 +75,14 @@ class LoginScreen extends Component {
         iosClientId: iosID,
         scopes: ["profile", "email"]
       });
-      console.log(result);
+      //console.log(result);
 
       if (result.type === "success") {
         const credential = firebase.auth.GoogleAuthProvider.credential(
           result.idToken,
           result.accessToken
         );
-        console.log(credential);
+        //console.log(credential);
         firebase
           .auth()
           .signInAndRetrieveDataWithCredential(credential)
@@ -103,7 +104,6 @@ class LoginScreen extends Component {
     }
   }
   async loginWithFacebook() {
-    //code
     this.props.requestLogin();
 
     const { navigate } = this.props.navigation;
@@ -124,28 +124,9 @@ class LoginScreen extends Component {
         });
       navigate("Home");
     }
-  };
-
-  logInUser = (email, password) => {
-    const { navigate } = this.props.navigation;
-    try {
-      if (this.state.password.length < 6) {
-        alert("Password is too short");
-        return;
-      }
-      this.props.requestLogin();
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-      // .then(user => this.props.loginSuccess(user));
-      navigate("Home");
-    } catch (error) {
-      this.props.loginFail(error.toString());
-    }
   }
 
   render() {
-
     return (
       <Container style={styles.container}>
         <NavBar
@@ -201,30 +182,7 @@ class LoginScreen extends Component {
               </Col>
               <Col size={1} />
             </Row>
-
-            <Row size={1}>
-              <Col size={1} />
-              <Col size={2}>
-                <H1 style={{ padding: 2, fontSize: 15, textAlign: "center" }}>Log in with</H1>
-                <Button
-                  block
-                  iconLeft
-                  danger
-                  onPress={() => {
-                    this.signInWithGoogleAsync();
-                  }}
-                >
-                  <Icon type="FontAwesome" name="google-plus" />
-                  <Text>Google</Text>
-                </Button>
-                <H1 style={{ padding: 1 }} />
-                <Button block iconLeft onPress={() => this.loginWithFacebook()}>
-                  <Icon type="FontAwesome" name="facebook-official" />
-                  <Text>Facebook Login</Text>
-                </Button>
-              </Col>
-              <Col size={1} />
-            </Row>
+            <SocialMediaButtons facebook={() => this.loginWithFacebook()} google={() => this.signInWithGoogleAsync()} />
           </Grid>
         </Content>
       </Container>
@@ -232,4 +190,5 @@ class LoginScreen extends Component {
   }
 }
 
-export default LoginScreen;
+const mapStateToProps = state => ({ user: state.user });
+export default connect(mapStateToProps, { requestLogin, loginSuccess, loginFail })(LoginScreen);
