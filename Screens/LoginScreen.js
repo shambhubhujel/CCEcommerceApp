@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as firebase from "firebase";
 import {
   Container,
   Content,
@@ -12,44 +13,135 @@ import {
   H1
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
+
+import { fbKey, androidID, iosID } from "../assets/constants";
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
-      password: "",
-      user: {},
-      loggedIn: false
+      password: ""
     };
     //use this word inside function
-    this.signUpUser = this.signUpUser.bind(this);
+    this.signInWithGoogleAsync = this.signInWithGoogleAsync.bind(this);
     this.logInUser = this.logInUser.bind(this);
     this.loginWithFacebook = this.loginWithFacebook.bind(this);
     this.signOut = this.signOut.bind(this);
   }
 
-  signUpUser = () => {
-    //code
-  };
-
-  logInUser = () => {
-    //code
-  };
-
-  signOut() {
-    //code
+  signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(
+        () => {
+          console.log("Signed Out");
+        },
+        function (error) {
+          console.error("Sign Out Error", error);
+        }
+      );
   }
 
-  async loginWithFacebook() {
-    //code
-  }
+ 
+
+  logInUser = (email, password) => {
+    const { navigate } = this.props.navigation;
+    try {
+      if (this.state.password.length < 6) {
+        alert("Password is too short");
+        return;
+      }
+      this.props.requestLogin();
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+      // .then(user => this.props.loginSuccess(user));
+      navigate("Home");
+    } catch (error) {
+      this.props.loginFail(error.toString());
+    }
+  };
 
   async signInWithGoogleAsync() {
+    try {
+      const { navigate } = this.props.navigation;
+      const result = await Expo.Google.logInAsync({
+        androidClientId: androidID,
+        iosClientId: iosID,
+        scopes: ["profile", "email"]
+      });
+      console.log(result);
+
+      if (result.type === "success") {
+        const credential = firebase.auth.GoogleAuthProvider.credential(
+          result.idToken,
+          result.accessToken
+        );
+        console.log(credential);
+        firebase
+          .auth()
+          .signInAndRetrieveDataWithCredential(credential)
+          // .then(user => {
+          //   this.props.loginSuccess(user);
+          // })
+          .catch(error => {
+            this.props.loginFail(error.toString());
+          });
+        navigate("Home");
+      } else {
+        Alert.alert("Login not sucessfull, try again.");
+      }
+      // if (this.props.user.auth === true) {
+      //   () => navigate("Home");
+      // }
+    } catch (e) {
+      console.log(e.toString());
+    }
+  }
+  async loginWithFacebook() {
     //code
+    this.props.requestLogin();
+
+    const { navigate } = this.props.navigation;
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+      fbKey,
+      { permissions: ["public_profile"] }
+    );
+
+    if (type == "success") {
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+
+      firebase
+        .auth()
+        .signInAndRetrieveDataWithCredential(credential)
+        // .then(user => this.props.loginSuccess(user))
+        .catch(error => {
+          this.props.loginFail(error);
+        });
+      navigate("Home");
+    }
+  };
+
+  logInUser = (email, password) => {
+    const { navigate } = this.props.navigation;
+    try {
+      if (this.state.password.length < 6) {
+        alert("Password is too short");
+        return;
+      }
+      this.props.requestLogin();
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+      // .then(user => this.props.loginSuccess(user));
+      navigate("Home");
+    } catch (error) {
+      this.props.loginFail(error.toString());
+    }
   }
 
   render() {
