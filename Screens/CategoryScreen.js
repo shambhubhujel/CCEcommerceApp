@@ -1,13 +1,7 @@
 import React, { Component } from "react";
-import { KeyboardAvoidingView, View } from "react-native";
 import {
   Container,
   Text,
-  Form,
-  Item,
-  Label,
-  Input,
-  Alert,
   Content,
   Card,
   CardItem,
@@ -16,14 +10,17 @@ import {
 
 import NavBar from "../Components/NavBar";
 import styles from "../assets/styling";
-import { bestBuyKey } from "../assets/constants";
+import SpinBubble from "../Components/Loaders/SpinBubble";
 
 export default class CategoryScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      categoryData: []
+      categoryData: [],
+      pageCount: 1,
+      totalPages: 0,
+      isReady: false,
     };
 
     //use this word inside function
@@ -33,23 +30,25 @@ export default class CategoryScreen extends Component {
     this.fetchCategories();
   }
 
-  fetchCategories() {
-    const path = `https://api.bestbuy.com/v1/categories(id=abcat*)?apiKey=${bestBuyKey}&pageSize=10&show=id,name&format=json`;
-    fetch(path)
-      .then(res => res.json())
-      .then(resData => {
-        this.setState({
-          categoryData: resData.categories
-        });
-        // console.log(resData.categories);
-      });
+  async fetchCategories() {
+    //code
+
   }
 
   render() {
-    const categoryCards = this.state.categoryData.map((item, i) => {
+    const { categoryData, isReady } = this.state;
+    const categoryCards = categoryData.map((item, i) => {
       return (
         <Card key={i}>
-          <CardItem button onPress={() => alert(item.id)}>
+          <CardItem
+            button
+            onPress={() =>
+              this.props.navigation.navigate("ResultScreen", {
+                categoryQuery: item.id,
+                categoryName: item.name
+              })
+            }
+          >
             <Body>
               <Text>{item.name}</Text>
             </Body>
@@ -64,7 +63,7 @@ export default class CategoryScreen extends Component {
           title="Category"
           drawerOpen={() => this.props.navigation.navigate("DrawerToggle")}
         />
-        <Content>{categoryCards}</Content>
+        {!isReady ? <SpinBubble /> : <Content>{categoryCards}</Content>}
       </Container>
     );
   }

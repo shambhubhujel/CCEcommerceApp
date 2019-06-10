@@ -1,20 +1,93 @@
-import React, { Component } from 'react';
-import { KeyboardAvoidingView } from "react-native";
-import { Container } from "native-base";
+import React, { Component } from "react";
 
-import NavBar from '../Components/NavBar';
-import styles from '../assets/styling';
+import {
+  Container,
+  Content,
+  Text,
+  List,
+  FlatList,
+  Left,
+  Body,
+  Thumbnail,
+  Icon,
+  Button,
+  Item,
+  Input
+} from "native-base";
+import { Col, Row, Grid } from "react-native-easy-grid";
+import NavBar from "../Components/NavBar";
+import styles from "../assets/styling";
 
-export default class ProfileScreen extends Component {
+class ProfileScreen extends Component {
   render() {
     return (
-      <KeyboardAvoidingView style={{flex:1}} behavior="padding">
       <Container style={styles.container}>
-        <NavBar title="Profile" drawerOpen={() => this.props.navigation.navigate('DrawerToggle')}/>
+        <NavBar
+          title="My Profile"
+          drawerOpen={() => this.props.navigation.navigate("DrawerToggle")}
+        />
+        <Content>
+          {this.props.user.auth ?
+            <Grid>
+              <Row>
+                <Col>
+                  <List>
+                    <FlatList avatar>
+                      <Left>
+                        <Thumbnail
+                          source={{ uri: user.providerData[0].photoURL }}
+                        />
+                      </Left>
+                      <Body>
+                        <Text>{user.displayName}</Text>
+                      </Body>
+                    </FlatList>
+                    <FlatList icon>
+                      <Left>
+                        <Icon name="sign-in" type="FontAwesome" />
+                      </Left>
+                      <Text>
+                        Signed up via : {user.providerData[0].providerId}
+                      </Text>
+                    </FlatList>
+                    <Item>
+                      <Icon active name="home" />
+                      <Input placeholder="Address" />
+                    </Item>
 
+                    <Item>
+                      <Icon active type="SimpleLineIcons" name="pencil" />
+                      <Input placeholder="Phone Number" />
+                    </Item>
+                  </List>
+                </Col>
+              </Row>
+              <Row style={{ padding: 40 }}>
+                <Col>
+                  <Button
+                    rounded
+                    full
+                    success
+                    onPress={() => this.props.navigation.navigate("Home")}
+                  >
+                    <Text>Save</Text>
+                  </Button>
+                </Col>
+              </Row>
+              <Row />
+            </Grid> :
+            <Button
+              rounded
+              full
+              success
+              onPress={() => this.props.navigation.navigate("Home")}
+            >
+              <Text>Opps</Text>
+            </Button>}
+        </Content>
       </Container>
-      </KeyboardAvoidingView>
     );
   }
 }
 
+export default ProfileScreen;
