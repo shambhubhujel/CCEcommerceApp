@@ -69,8 +69,7 @@ class DrawerContent extends Component {
             source={require("../../assets/Images/logo.png")}
             style={{
               height: 100,
-              width: 100,
-              borderRadius: 75
+              width: 150,
             }}
           />
         </Header>
@@ -109,7 +108,7 @@ class DrawerContent extends Component {
                     </Right>
                   </ListItem>
 
-                  {/* <ListItem
+                  <ListItem
                     icon
                     onPress={() => navigation.navigate("WatchList")}
                   >
@@ -122,7 +121,7 @@ class DrawerContent extends Component {
                     <Right>
                       <Icon name="ios-arrow-forward" />
                     </Right>
-                  </ListItem> */}
+                  </ListItem> 
 
                   <ListItem
                     icon

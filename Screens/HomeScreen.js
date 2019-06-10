@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { RefreshControl } from "react-native";
 import { connect } from 'react-redux';
 import { initialFetch } from '../redux/reducers/InitialLoad';
-
+import axios from "axios";
 import Splash from "../Components/Loaders/Splash";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import HomeNavBar from "../Components/HomeNavBar";

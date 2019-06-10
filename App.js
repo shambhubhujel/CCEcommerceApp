@@ -1,7 +1,5 @@
 import React from "react";
 import * as Expo from "expo";
-
-//packages
 import firebase from "firebase";
 import { Dimensions } from "react-native";
 import ParentProvider from "./redux/ParentProvider";

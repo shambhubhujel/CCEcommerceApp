@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { bestBuyKey } from '../../private/constants';
 // Initial state
 const initialState = {
@@ -30,7 +31,35 @@ export const getAllDataFail = (error) => ({
 });
 
 export const initialFetch = () => {
-  //code
+  const trendingPath = `https://api.bestbuy.com/beta/products/trendingViewed?apiKey=${bestBuyKey}`;
+
+  const popularPath = `https://api.bestbuy.com/beta/products/mostViewed?apiKey=${bestBuyKey}`;
+
+  const getTrendItems = async () => (
+    await axios.get(trendingPath)
+  );
+
+  const getPopularItems = async () => (
+    await axios.get(popularPath)
+  );
+
+  return (dispatch) => {
+    dispatch(getInitialData());
+    //2 api resquest in 1
+    axios.all([getTrendItems(), getPopularItems()])
+      .then(axios.spread((trendResult, popularResult) => {
+        let trends = trendResult.data.results;
+        //take 1st 5 entries of the array only
+        let trendsHalf = trends.slice(0, 5);
+        //console.log(removed);
+
+        let populars = popularResult.data.results;
+        dispatch(getAllDataSuccess(trendsHalf, populars));
+      }))
+      .catch((error) => {
+        dispatch(getAllDataFail(error));
+      });
+  }
 }
 
 const initialLoad = (state = initialState, action) => {

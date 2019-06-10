@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Image } from "react-native";
+import axios from "axios";
 import {
   Container,
   Button,
@@ -12,8 +13,10 @@ import {
   Left,
   Right,
 } from "native-base";
+import { mLabKey } from "../private/constants";
 
 import styles from "../assets/styling";
+import { bestBuyKey } from "../private/constants";
 import HeaderBack from "../Components/HeaderBack";
 import SpinBubble from "../Components/Loaders/SpinBubble";
 
@@ -28,15 +31,36 @@ class ShowCaseScreen extends Component {
   }
 
   //gets item based on serial #y
-  async fetchItem() {
-    //code
+  async fetchItem(query) {
+    const path = `https://api.bestbuy.com/v1/products(sku=${query})?apiKey=${bestBuyKey}&sort=bestSellingRank.asc&show=bestSellingRank,color,condition,customerReviewAverage,customerReviewCount,description,details.name,details.value,dollarSavings,features.feature,freeShipping,frequentlyPurchasedWith.sku,image,includedItemList.includedItem,inStoreAvailability,inStoreAvailabilityText,longDescription,manufacturer,mobileUrl,modelNumber,name,onlineAvailability,onlineAvailabilityText,onSale,percentSavings,preowned,regularPrice,relatedProducts.sku,salePrice,shipping,shippingCost,shortDescription,sku,thumbnailImage,type,upc,url&format=json`;
+
+    // console.log("====================================");
+    // console.log(path);
+    // console.log("====================================");
+
+    await axios
+      .get(path)
+      .then(response => {
+        this.setState({
+          searchData: response.data.products[0],
+          isReady: true
+        });
+        // console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   //post item to cart - db
-  postItem() {
-    //code
+  postItem(title, picture, price, sku) {
+    axios
+      .post(
+        `https://api.mlab.com/api/1/databases/e-sell-mobile/collections/e-sell-mobile?apiKey=${mLabKey}`,
+        { title, picture, price, sku }
+      )
+      .then(() => this.props.navigation.navigate("ShoppingCart"));
   }
-
 
   componentDidMount() {
     //get params as props from home screen search
@@ -46,7 +70,7 @@ class ShowCaseScreen extends Component {
     if (query == null) {
       console.log("query is empty");
     } else {
-      this.fetchItem();
+      this.fetchItem(query);
     }
   }
   render() {
@@ -118,7 +142,10 @@ class ShowCaseScreen extends Component {
                     // }
                     onPress={() => {
                       this.postItem(
-                        
+                        item.name,
+                        item.thumbnailImage,
+                        item.salePrice,
+                        item.sku
                       );
                     }}
                   >

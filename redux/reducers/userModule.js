@@ -1,3 +1,7 @@
+import firebase from "firebase";
+import axios from 'axios';
+import { bestBuyKey } from '../../private/constants';
+import { fbKey, androidID, iosID } from "../../private/constants";
 
 // Initial state
 const initialState = {
@@ -12,6 +16,8 @@ const REQUEST_LOGIN = 'REQUEST_LOGIN';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_FAIL';
 const LOGOUT = 'LOGOUT';
+const REQUEST_SIGNUP = 'REQUEST_SIGNUP';
+const LOGIN_SIGNUP = 'LOGIN_SIGNUP';
 
 //Action creators
 export const requestLogin = () => ({
@@ -33,6 +39,9 @@ export const logout = () => ({
 });
 
 export const login = () => {
+  //testing data for validation
+  const correctEmail = "a";
+  const correctPassword = "a";
 
   return dispatch => {
     dispatch(requestLogin());

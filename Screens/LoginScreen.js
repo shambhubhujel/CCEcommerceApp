@@ -20,6 +20,7 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { fbKey, androidID, iosID } from "../private/constants";
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
+import SocialMediaButtons from "../Components/SocialMediaButtons";
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -30,9 +31,9 @@ class LoginScreen extends Component {
     };
     //use this word inside function
     this.signInWithGoogleAsync = this.signInWithGoogleAsync.bind(this);
-    this.logInUser = this.logInUser.bind(this);
     this.loginWithFacebook = this.loginWithFacebook.bind(this);
     this.signOut = this.signOut.bind(this);
+    this.logInUser = this.logInUser.bind(this);
   }
 
   signOut = () => {
@@ -103,6 +104,7 @@ class LoginScreen extends Component {
       console.log(e.toString());
     }
   }
+
   async loginWithFacebook() {
     this.props.requestLogin();
 
