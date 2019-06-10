@@ -17,15 +17,13 @@ const SocialMediaButtons = (props) => {
         block
         iconLeft
         danger
-        onPress={() => {
-          this.signInWithGoogleAsync();
-        }}
-      >
+        onPress={() => props.google()}
+        >
         <Icon type="FontAwesome" name="google-plus" />
         <Text>Google</Text>
       </Button>
       <H1 style={{ padding: 1 }} />
-      <Button block iconLeft onPress={() => this.loginWithFacebook()}>
+      <Button block iconLeft onPress={() => props.facebook()}>
         <Icon type="FontAwesome" name="facebook-official" />
         <Text>Facebook Login</Text>
       </Button>

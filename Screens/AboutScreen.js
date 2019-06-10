@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 
-import { H1, H3, Container, Content, Icon, Text } from "native-base";
+import { H1, H3, Container, Content, Icon, Text} from "native-base";
+
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
 import { Col, Row, Grid } from "react-native-easy-grid";
+import PersonAnimated from "../Components/Loaders/PersonAnimated";
 
 
 
 
 class AboutScreen extends Component {
   render() {
+
     return (
 
 
@@ -23,13 +26,8 @@ class AboutScreen extends Component {
             <Row style={{ padding: 20 }}>
               <H1>React Native e-commerce app </H1>
             </Row>
-            <Row><Image
-              source={require("../assets/Images/logo.png")}
-              style={{
-                height: 100,
-                width: 150
-              }}
-            />
+            <Row>
+              <PersonAnimated/>
             </Row>
             <Row style={{ padding: 20 }}>
 

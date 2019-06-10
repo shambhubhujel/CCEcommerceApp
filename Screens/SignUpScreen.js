@@ -21,6 +21,7 @@ import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
 import { requestLogin, loginSuccess, loginFail } from '../redux/reducers/userModule';
 import { fbKey, androidID, iosID } from "../private/constants";
+import SocialMediaButtons from "../Components/SocialMediaButtons";
 
 class SignUpScreen extends Component {
   constructor(props) {

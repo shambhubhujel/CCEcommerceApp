@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
   Container,
+  Header,
   Content,
+  H1,
   Card,
   CardItem,
   Left,
@@ -9,10 +12,14 @@ import {
   Body,
   Thumbnail,
   Text,
-  Button} from "native-base";
+  Button,
+  Icon,
+  Alert
+} from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import styles from "../assets/styling";
 import NavBar from "../Components/NavBar";
+import { mLabKey } from "../private/constants";
 
 class ShoppingCartScreen extends Component {
   constructor(props) {
@@ -29,15 +36,28 @@ class ShoppingCartScreen extends Component {
     // this.deleteItem(0);
   }
   async getWatchlist() {
-    //code
+    await axios
+      .get(
+        `https://api.mlab.com/api/1/databases/e-sell-mobile/collections/e-sell-mobile?apiKey=${mLabKey}`
+      )
+      .then(response => {
+        this.setState({ items: response.data });
+      });
   }
 
-  deleteItem() {
-    //code
+  deleteItem(id) {
+    axios
+      .delete(
+        `https://api.mlab.com/api/1/databases/e-sell-mobile/collections/e-sell-mobile/${id}?apiKey=${mLabKey}`
+      )
+      .then(() => this.getWatchlist());
   }
 
-  updateItem() {
-   //code
+  updateItem(id) {
+    axios.update(
+      `https://api.mlab.com/api/1/databases/e-sell-mobile/collections/e-sell-mobile?apiKey=${mLabKey}`,
+      { id }
+    );
   }
 
   render() {
@@ -83,7 +103,7 @@ class ShoppingCartScreen extends Component {
                 danger
                 textStyle={{ color: "#87838B" }}
                 onPress={() => {
-                  this.deleteItem();
+                  this.deleteItem(item._id.$oid);
                 }}
               >
                 {/* <Icon name="MaterialCommunityIcons" type="delete-circle" /> */}

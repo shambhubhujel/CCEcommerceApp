@@ -7,7 +7,7 @@ import {
   CardItem,
   Body
 } from "native-base";
-
+import axios from "axios";
 import NavBar from "../Components/NavBar";
 import styles from "../assets/styling";
 import SpinBubble from "../Components/Loaders/SpinBubble";
@@ -32,6 +32,23 @@ export default class CategoryScreen extends Component {
 
   async fetchCategories() {
     //code
+    const pageCount = this.state.pageCount;
+    const path = `https://api.bestbuy.com/v1/categories(id=abcat*)?apiKey=${bestBuyKey}&pageSize=20&page=${pageCount}&show=id,name&format=json`;
+
+    await axios
+      .get(path)
+      .then(response => {
+        this.setState({
+          categoryData: response.data.categories,
+          totalPages: response.data.totalPages,
+          isReady: true
+        });
+        // console.log(response.data.categories);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
 
   }
 

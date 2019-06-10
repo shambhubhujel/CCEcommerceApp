@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Image } from "react-native";
+
 import { starRating } from '../assets/GenerateStarRating';
+import axios from "axios";
 import {
   Container,
   Content,
@@ -13,6 +15,7 @@ import {
   Right,
 } from "native-base";
 import styles from "../assets/styling";
+import { bestBuyKey } from "../private/constants";
 import HeaderBack from "../Components/HeaderBack";
 import SpaceLoader from "../Components/Loaders/SpaceLoader";
 
@@ -34,10 +37,10 @@ class ResultScreen extends Component {
     //get props passed from search screens
     const { params } = this.props.navigation.state;
     if (params.searchQuery) {
-      this.fetchItem();
+      this.fetchItem(params.searchQuery);
     }
     if (params.categoryQuery) {
-      this.fetchItemsByCategory();
+      this.fetchItemsByCategory(params.categoryQuery);
     }
 
 
@@ -45,12 +48,49 @@ class ResultScreen extends Component {
 
 
   //gets all items based on user query
-  async fetchItem() {
-    //code
+  async fetchItem(query) {
+    const pageCount = this.state.pageCount;
+    // const path = `https://api.bestbuy.com/v1/products((search=${query}))?apiKey=${bestBuyKey}&sort=customerReviewAverage.asc&show=name,regularPrice,salePrice,customerReviewAverage,freeShipping,shipping,thumbnailImage,image&pageSize=50&page=${pageCount}&format=json`;
+    const path = `https://api.bestbuy.com/v1/products((search=${query}))?apiKey=${bestBuyKey}&sort=customerReviewCount.dsc&show=name,image,customerReviewAverage,customerReviewCount,bestSellingRank,manufacturer,modelNumber,regularPrice,salePrice,mobileUrl,percentSavings,inStoreAvailability,freeShipping,sku,shippingCost&pageSize=30&page=${pageCount}&format=json`;
+    // console.log("====================================");
+    // console.log(path);
+    // console.log("====================================");
+
+    await axios
+      .get(path)
+      .then(response => {
+        this.setState({
+          searchData: response.data.products,
+          totalPages: response.data.totalPages,
+          isReady: true
+        });
+        console.log("search query success");
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
   //gets all items based on category
-  async fetchItemsByCategory() {
-    //code
+  async fetchItemsByCategory(query) {
+    const pageCount = this.state.pageCount;
+    const path = `https://api.bestbuy.com/v1/products((categoryPath.id=${query}))?apiKey=${bestBuyKey}&sort=customerReviewCount.dsc&show=name,image,customerReviewAverage,customerReviewCount,bestSellingRank,manufacturer,modelNumber,regularPrice,salePrice,mobileUrl,percentSavings,inStoreAvailability,freeShipping,sku,shippingCost&pageSize=30&page=${pageCount}&format=json`;
+    // console.log("====================================");
+    // console.log("category path" + path);
+    // console.log("====================================");
+
+    await axios
+      .get(path)
+      .then(response => {
+        this.setState({
+          searchData: response.data.products,
+          totalPages: response.data.totalPages,
+          isReady: true
+        });
+        // console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
 
