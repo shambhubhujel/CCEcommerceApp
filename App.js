@@ -32,9 +32,9 @@ export default class App extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user != null) {
         store.dispatch(loginSuccess(user));
-        console.log("User is authentificated!");
+        console.log("User is authenticated!!!");
       } else {
-        console.log("Guest online");
+        console.log("Guest online!!!");
       }
     });
     console.log("App started succesfully");

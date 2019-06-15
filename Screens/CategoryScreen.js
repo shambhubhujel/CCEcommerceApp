@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { bestBuyKey } from '../private/constants';
 import {
   Container,
   Text,

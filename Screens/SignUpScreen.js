@@ -177,6 +177,7 @@ class SignUpScreen extends Component {
                     <Input
                       autoCorrect={false}
                       autoCapitalize="none"
+                      value={this.state.email}
                       onChangeText={email => this.setState({ email })}
                     />
                   </Item>
@@ -187,6 +188,8 @@ class SignUpScreen extends Component {
                       autoCorrect={false}
                       autoCapitalize="none"
                       onChangeText={password => this.setState({ password })}
+                      secureTextEntry 
+                      value={this.state.password}
                     />
                   </Item>
                   <Item floatingLabel>
@@ -194,6 +197,8 @@ class SignUpScreen extends Component {
                     <Input
                       autoCorrect={false}
                       autoCapitalize="none"
+                      secureTextEntry 
+                      value={this.state.password}
                       onChangeText={passwordConfirm =>
                         this.setState({ passwordConfirm })
                       }

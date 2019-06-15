@@ -88,7 +88,10 @@ class ShoppingCartScreen extends Component {
               <Text style={{ color: "red" }}> $ {item.price} </Text>
             </Left>
             <Body>
-              <Button rounded success>
+              <Button rounded success
+              onPress={() => {
+                this.deleteItem(item._id.$oid);
+                alert("Success,                                                              Thank you  !!!");}}>
                 {/* <Icon
                   name="MaterialCommunityIcons
 "

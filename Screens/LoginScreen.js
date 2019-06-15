@@ -27,7 +27,9 @@ class LoginScreen extends Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      user: {},
+      loggedIn: false
     };
     //use this word inside function
     this.signInWithGoogleAsync = this.signInWithGoogleAsync.bind(this);
@@ -50,20 +52,22 @@ class LoginScreen extends Component {
       );
   }
   logInUser = (email, password) => {
-    const { navigate } = this.props.navigation;
     try {
       if (this.state.password.length < 6) {
         alert("Password is too short");
         return;
       }
-      this.props.requestLogin();
+
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-      // .then(user => this.props.loginSuccess(user));
-      navigate("Home");
+        .then(user => {
+          this.setState({ user, loggedIn: true });
+          // console.log(user);
+        });
+      console.log("Logged in with email");
     } catch (error) {
-      this.props.loginFail(error.toString());
+      console.log(error.toString());
     }
   };
 
@@ -151,6 +155,7 @@ class LoginScreen extends Component {
                       autoCorrect={false}
                       autoCapitalize="none"
                       onChangeText={email => this.setState({ email })}
+                      value={this.state.email}
                     />
                   </Item>
 
@@ -160,6 +165,8 @@ class LoginScreen extends Component {
                       autoCorrect={false}
                       autoCapitalize="none"
                       onChangeText={password => this.setState({ password })}
+                      secureTextEntry
+                      value={this.state.password}
                     />
                   </Item>
                 </Form>

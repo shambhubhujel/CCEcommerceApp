@@ -22,17 +22,7 @@ const HomeNavBar = props => {
           onPress={() => props.handleNav.navigate("DrawerToggle")}
           style={styles.mainIcons}
         />
-        {/* <SearchBar
-                round
-                clearIcon
-                showLoading
-                onChangeText={searchTxt => this.setState({ searchTxt })}
-                onClear={() => this.setState({ searchTxt: "" })}
-                onCancel={() => this.setState({ searchTxt: "" })}
-                containerStyle={{ width: 330, height: 50 }}
-                placeholder="Search Products"
-                icon={{ type: "font-awesome", name: "search" }}
-              /> */}
+        
         <Item
           onPress={() =>
             props.handleNav.navigate("SearchScreen")

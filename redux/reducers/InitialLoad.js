@@ -34,7 +34,7 @@ export const initialFetch = () => {
   const trendingPath = `https://api.bestbuy.com/beta/products/trendingViewed?apiKey=${bestBuyKey}`;
 
   const popularPath = `https://api.bestbuy.com/beta/products/mostViewed?apiKey=${bestBuyKey}`;
-
+  //const popularPath = `https://svcs.ebay.com/services/search/FindingService/v1?SECURITY-APPNAME=ShambhuB-binarywo-PRD-91e62fb68-db444d58&OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=Laptops&paginationInput.entriesPerPage=6&GLOBAL-ID=EBAY-AU&siteid=15`;
   const getTrendItems = async () => (
     await axios.get(trendingPath)
   );

@@ -17,7 +17,7 @@ import {
 import styles from "../assets/styling";
 import { bestBuyKey } from "../private/constants";
 import HeaderBack from "../Components/HeaderBack";
-import SpaceLoader from "../Components/Loaders/SpaceLoader";
+import SpinBubble from "../Components/Loaders/SpinBubble";
 
 class ResultScreen extends Component {
   constructor(props) {
@@ -183,7 +183,7 @@ class ResultScreen extends Component {
     });
 
     return (
-      !isReady ? <SpaceLoader /> :
+      !isReady ? <SpinBubble /> :
         <Container style={styles.container}>
           <HeaderBack
             title={`${params.searchQuery ? params.searchQuery : params.categoryName}`}

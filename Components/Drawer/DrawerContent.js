@@ -107,22 +107,6 @@ class DrawerContent extends Component {
                       <Icon name="ios-arrow-forward" />
                     </Right>
                   </ListItem>
-
-                  <ListItem
-                    icon
-                    onPress={() => navigation.navigate("WatchList")}
-                  >
-                    <Left>
-                      <Icon type="Octicons" name="checklist" />
-                    </Left>
-                    <Body>
-                      <Text>My Watchlist</Text>
-                    </Body>
-                    <Right>
-                      <Icon name="ios-arrow-forward" />
-                    </Right>
-                  </ListItem> 
-
                   <ListItem
                     icon
                     onPress={() => navigation.navigate("ShoppingCart")}
